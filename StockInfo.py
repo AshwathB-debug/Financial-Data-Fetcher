@@ -25,8 +25,7 @@ def stockInfo(APIkey, ticker, countryName, typeOfInvestment):
     except:
         return "The ticker, country, or type of investment you entered does not exist in our database. Please check for incorrect spelling or spaces. Refer to the help command for any doubts. "
 
-    
-    
+
 def stockDataByMins(APIkey, ticker, mins):
     link = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={mins}min&apikey={APIkey}&datatype=csv"
     stock = pd.read_csv(link)
@@ -78,16 +77,16 @@ if __name__ == "__main__":
                     print(stockDataByDays(APIkey, ticker, days))
                     
                 else:
-                    print("Please type Mins or Days. ")
                     helpUser()
+                    print("Please type Mins or Days. ")
                     
             else:
-                print("The type of investment doesn't exist in our database. Please try again. Refer to the help function. ")
                 helpUser()
+                print("The type of investment doesn't exist in our database. Please try again. Refer to the help function. ")
         
         else:
-            print("The country doesn't exist in our database. Please try again. Refer to the help function. ")
             helpUser()
+            print("The country doesn't exist in our database. Please try again. Refer to the help function. ")
             
     except:
         print("You have called the API too many times. Please try again later")
