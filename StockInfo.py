@@ -36,18 +36,15 @@ def stockInfo(APIkey, ticker, typeOfInvestment):
     link = f"https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={ticker}&apikey={APIkey}&datatype=csv"
     df = pd.read_csv(link)
     
-    del df["timezone"]
-    del df["matchScore"]
-    del df["marketOpen"]
-    del df["marketClose"]
-    del df["region"]
-    del df["currency"]
-    
     
     try:
-        return df[(df["symbol"] == ticker) & (df["type"] == typeOfInvestment)]
+        if df[df["symbol"] == ticker] & df[df["type"] == typeOfInvestment]:
+            return "The stock ticker exists! "
+        else:
+            return "The ticker, country, or type of investment you entered does not exist in our database. Please check for incorrect spelling or spaces. Refer to the help command for any doubts."
+        
     except:
-        return "The ticker, country, or type of investment you entered does not exist in our database. Please check for incorrect spelling or spaces. Refer to the help command for any doubts. "
+        return "You have use the stockInfo function too many times. Please try again later. "
 
 
 # This function reads the link using Python's requests module and writes the data from the link into a csv file and returns it
@@ -90,14 +87,8 @@ if __name__ == "__main__":
                     
                 typeOfInvestment = input("Enter the type of investment: ").strip().title()
                 
-
-                if (typeOfInvestment == "Equity" or typeOfInvestment == "Mutual Fund"):
-                    print(stockInfo(APIkey, ticker, typeOfInvestment))
-                    print("The stock ticker exists! ")
-                    print(companyInfo(nameOfFunction, ticker, APIkey))
-                        
-                else:
-                    print("The type of investment you entered does not exist in our database. Please refer to the help function. ")  
+                print(stockInfo(APIkey, ticker, typeOfInvestment))
+                print(companyInfo(nameOfFunction, ticker, APIkey))      
                     
             else:
                 print("The function you typed is incorrect. Please refer to the help function. ")
