@@ -1,92 +1,112 @@
+# Importing the necessary modules and libraries to access the API and provide the user with quality information
 import pandas as pd
 import os
 from dotenv import load_dotenv
 import webbrowser
+import requests
 
 
+# Upon calling this function, it will direct the user to the Nasdaq stock screener website with which they can look for a companies
+def openWebsite():
+    webbrowser.open_new("https://www.nasdaq.com/market-activity/stocks/screener")
+    print("To find a companies stock ticker, refer to this website: https://www.nasdaq.com/market-activity/stocks/screener ")
+
+
+# This function is used to support the user if they are lost or need to refer to something to use the Stock information terminal. 
 def helpUser():
-    countries = ["United States", "United Kingdom", "Canada", "Germany", "India", "Mainland China", "France", "Spain", "Portugal", "Hong Kong", "Brazil", "South Africa", "Japan", "Mexico"]
-    print("To find a companies stock ticker, refer to this website: " + webbrowser.get("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open_new("https://finance.yahoo.com/"))
-    print(f"The countries in our database are {countries}. ")
-    print("The type of investments in our database are: \n 1. Equity\n 2. Mutual Fund. ")
+    return """
+          "The functions you can write are the following: ["OVERVIEW", "INCOME_STATEMENT", "BALANCE_SHEET", "CASH_FLOW", "EARNINGS"]
+           The stock ticker can be any company you like but if you want more information on a stock, use the link to the Nasdaq stock screener provided.
+           The two types of investments you can give as input: 
+                1. Equity
+                2. Mutual Fund
+           Once you have entered the appropriate information, you can access the data in the csv file called stock_data.csv.
+           Thank you for using the Stock information terminal!
+           """
+ 
+    
+# This function has an array of the different functions the user can choose from to get information about a stock. 
+def listOfFunctions(function):
+    arrOfFunctions = ["OVERVIEW", "INCOME_STATEMENT", "BALANCE_SHEET", "CASH_FLOW", "EARNINGS"]
+    return function in arrOfFunctions
 
 
-def listOfCountries(country):
-    countries = ["United States", "United Kingdom", "Canada", "Germany", "India", "Mainland China", "France", "Spain", "Portugal", "Hong Kong", "Brazil", "South Africa", "Japan", "Mexico"]
-    return country in countries
-    
-    
-def stockInfo(APIkey, ticker, countryName, typeOfInvestment):
+# This function is used to pass in the ticker symbol and type of investment to find the stock ticker and return it.
+def stockInfo(APIkey, ticker, typeOfInvestment):
     link = f"https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={ticker}&apikey={APIkey}&datatype=csv"
     df = pd.read_csv(link)
-
+    
+    del df["timezone"]
+    del df["matchScore"]
+    del df["marketOpen"]
+    del df["marketClose"]
+    del df["region"]
+    del df["currency"]
+    
+    
     try:
-        return df[(df["region"] == countryName) & (df["type"] == typeOfInvestment)]
+        return df[(df["symbol"] == ticker) & (df["type"] == typeOfInvestment)]
     except:
         return "The ticker, country, or type of investment you entered does not exist in our database. Please check for incorrect spelling or spaces. Refer to the help command for any doubts. "
 
 
-def stockDataByMins(APIkey, ticker, mins):
-    link = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={mins}min&apikey={APIkey}&datatype=csv"
-    stock = pd.read_csv(link)
+# This function reads the link using Python's requests module and writes the data from the link into a csv file and returns it
+def companyInfo(FUNCTION, ticker, APIkey):
+    link = f"https://www.alphavantage.co/query?function={FUNCTION}&symbol={ticker}&apikey={APIkey}"
     
     try:
-        return stock.head(mins)
-    except:
-        return "Error fetching stock data. You may have called the API too many times. Try again later. "
+
+        r = requests.get(link)
+        r.raise_for_status()
+        stock_data = "stock_data.csv"
+        
+        with open(stock_data, "wb") as file:
+            file.write(r.content)
+        return f"The CSV file for the ticker you entered has been created successfully: {stock_data}"
+        
+    except Exception as e:
+        return f"An unexpected error occurred: {e}"
     
 
-def stockDataByDays(APIkey, ticker, days):
-    link = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey={APIkey}&datatype=csv"
-    stock = pd.read_csv(link)
-    
-    try:
-        return stock.head(days)
-    except:
-        return "Error fetching stock data. You may have called the API too many times. Try again later. "
-
-
+# The main function executes the functions and accesses the API key to get all the information from Alpha Vantage's website   
 if __name__ == "__main__":
     load_dotenv()
     APIkey = os.getenv("API_key")
         
     try:
         print("Welcome to my stock information terminal! If you need any help, refer to the helpUser function to get more information. Thank you! ")
+        askUser = input("Do you want to refer to the Nasdaq stock screener website to get a companies stock ticker? (Respond with Y or N or N/A (To access the help function)): ").strip().title()
         
-        ticker = input("Enter stock ticker: ").strip().upper()
-        countryName = input("Enter the name of the country (Please enter the full name of the country): ").strip().title()
-        
-        if listOfCountries(countryName):
-            print("The country exists in our database! ")
+        if askUser == "Y":
+            openWebsite()
             
-            typeOfInvestment = input("Enter the type of investment: ").strip().title()
+        elif askUser == "N":
+            nameOfFunction = input("Enter the name of the function: ").strip().upper()
             
-            if (typeOfInvestment == "Equity" or typeOfInvestment == "Mutual Fund"):
-                print("The type of investment you entered exists! ")
+            if listOfFunctions(nameOfFunction):
+                print("The function exists! ")
                 
-                minsOrDays = input(f"Would you like to see {ticker}'s stock history by Mins or Days? (Please type minutes as mins) ").strip().title()
+                ticker = input("Enter stock ticker (Refer to Nasdaq stock screener website if you are not sure: https://www.nasdaq.com/market-activity/stocks/screener): ").strip().upper()
+                    
+                typeOfInvestment = input("Enter the type of investment: ").strip().title()
                 
-                if minsOrDays == "Mins":
-                    minutes = int(input(f"Enter the number of mins you would like to see for {ticker}'s previous data (Please enter 1, 5, 15, 30, or 60 mins as those are supported): "))
-                    print(stockInfo(APIkey, ticker, countryName, typeOfInvestment))
-                    print(stockDataByMins(APIkey, ticker, minutes))
-                    
-                elif minsOrDays == "Days":
-                    days = int(input(f"Enter the number of days to see more about {ticker}'s price: "))
-                    print(stockInfo(APIkey, ticker, countryName, typeOfInvestment))
-                    print(stockDataByDays(APIkey, ticker, days))
-                    
+
+                if (typeOfInvestment == "Equity" or typeOfInvestment == "Mutual Fund"):
+                    print(stockInfo(APIkey, ticker, typeOfInvestment))
+                    print("The stock ticker exists! ")
+                    print(companyInfo(nameOfFunction, ticker, APIkey))
+                        
                 else:
-                    helpUser()
-                    print("Please type Mins or Days. ")
+                    print("The type of investment you entered does not exist in our database. Please refer to the help function. ")  
                     
             else:
-                helpUser()
-                print("The type of investment doesn't exist in our database. Please try again. Refer to the help function. ")
+                print("The function you typed is incorrect. Please refer to the help function. ")
         
+        elif askUser == "N/A":
+            print(helpUser())
+            
         else:
-            helpUser()
-            print("The country doesn't exist in our database. Please try again. Refer to the help function. ")
+            print("Please type Y or N, or refer to the help function. ")
             
     except:
         print("You have called the API too many times. Please try again later")
