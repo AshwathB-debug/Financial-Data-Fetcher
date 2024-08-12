@@ -33,11 +33,11 @@ def helpUser():
            """
  
     
-# This function has an array of the different functions the user can choose from to get information about a stock. 
+# This function utilizes a tuple containing the different functions the user can choose from to get information about a stock. 
 def listOfFunctions(function):
     
-    arrOfFunctions = ["OVERVIEW", "INCOME_STATEMENT", "BALANCE_SHEET", "CASH_FLOW", "EARNINGS"]
-    return function in arrOfFunctions
+    tupOfFunctions = ("OVERVIEW", "INCOME_STATEMENT", "BALANCE_SHEET", "CASH_FLOW", "EARNINGS")
+    return function in tupOfFunctions
 
 
 # This function is used to pass in the ticker symbol and type of investment to find the stock ticker and return it.
@@ -78,6 +78,8 @@ def companyInfo(FUNCTION, ticker, APIkey):
     except Exception as e:
         return f"An unexpected error occurred: {e}"
     
+    
+# This function leverages the stock_data csv file and will send an email to the user with the stock's financial data
 
 def sendEmail(stock_data):
     
