@@ -23,7 +23,9 @@ def openWebsite():
 def helpUser():
     
     return """
-          "The functions you can write are the following: ["OVERVIEW", "INCOME_STATEMENT", "BALANCE_SHEET", "CASH_FLOW", "EARNINGS"]
+          "
+          PLEASE TYPE US BASED STOCK TICKERS ONLY***
+          The functions you can write are the following: ["OVERVIEW", "INCOME_STATEMENT", "BALANCE_SHEET", "CASH_FLOW", "EARNINGS"]
            The stock ticker can be any company you like but if you want more information on a stock, use the link to the Nasdaq stock screener provided.
            The two types of investments you can give as input: 
                 1. Equity
