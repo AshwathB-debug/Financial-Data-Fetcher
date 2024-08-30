@@ -20,6 +20,6 @@ If you'd like to run the project on your own, follow these steps:
 
 
 ## References
-1. Sending emails: https://www.youtube.com/watch?v=ueqZ7RL8zxM&t=199s
-2. Sending attachments through emails: https://www.youtube.com/watch?v=Sddnn6dpqk0
+1. Email functionality: Inspired by this tutorial to know how to send emails using Python: https://www.youtube.com/watch?v=ueqZ7RL8zxM&t=199s
+2. Sending attachments through emails: Implemented the concept of sending attachments through email: https://www.youtube.com/watch?v=Sddnn6dpqk0
 3. Alpha Vantage API documentation website: https://www.alphavantage.co/documentation/
