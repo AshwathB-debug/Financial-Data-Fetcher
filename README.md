@@ -19,7 +19,7 @@ If you'd like to run the project on your own, follow these steps:
    pip install -r requirements.txt 
 
 
-## References
-1. Email functionality: Inspired by this tutorial to know how to send emails using Python: https://www.youtube.com/watch?v=ueqZ7RL8zxM&t=199s
-2. Sending attachments through emails: Implemented the concept of sending attachments through email: https://www.youtube.com/watch?v=Sddnn6dpqk0
-3. Alpha Vantage API documentation website: https://www.alphavantage.co/documentation/
+## Learning Resources
+1. Email functionality: Gained insights on sending emails in Python from this tutorial: https://www.youtube.com/watch?v=ueqZ7RL8zxM&t=199s
+2. Sending attachments through emails: Applied concepts of sending email attachments through this tutorial: https://www.youtube.com/watch?v=Sddnn6dpqk0
+3. Alpha Vantage API documentation website: Developed using guidance from: https://www.alphavantage.co/documentation/
