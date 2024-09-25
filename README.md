@@ -2,7 +2,7 @@
 
 
 ## Project Description
-The Stock Information Project is designed to help investors in retrieving comprehensive financial data on companies based in the US which could be highly beneficial when making decisions on whether or not to buy, sell, or hold a stock. It leverages the Alpha Vantage API to fetch data and send the data to the user as an email with a CSV file attachment. 
+The Financial Data Fetcher project is designed to help investors in retrieving comprehensive financial data on companies based in the US which could be highly beneficial when making decisions on whether or not to buy, sell, or hold a stock. It leverages the Alpha Vantage API to fetch data and send the data to the user as an email with a CSV file attachment. 
 
 
 ## Features
