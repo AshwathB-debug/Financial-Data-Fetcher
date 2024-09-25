@@ -1,4 +1,4 @@
-# Stock Information Project
+# Financial Data Fetcher
 
 
 ## Project Description
